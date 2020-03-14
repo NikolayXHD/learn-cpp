@@ -24,9 +24,13 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
         ${CMAKE_CURRENT_BINARY_DIR}/googletest-build
         EXCLUDE_FROM_ALL)
 
-add_executable(learn_cpp main.cpp)
-
+add_executable(main main.cpp)
 add_executable(capital_cities capital_cities.cpp)
-target_link_libraries(capital_cities gtest_main)
-add_test(NAME capital_cities_test COMMAND capital_cities)
+
+add_executable(tests tests.cpp)
+target_link_libraries(tests gtest_main)
+
+add_executable(test_setup test_setup.cpp)
+target_link_libraries(test_setup gtest_main)
+
 enable_testing()
