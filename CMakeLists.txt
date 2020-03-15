@@ -22,15 +22,25 @@ endif()
 # the gtest and gtest_main targets.
 add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
         ${CMAKE_CURRENT_BINARY_DIR}/googletest-build
-        EXCLUDE_FROM_ALL)
+        EXCLUDE_FROM_ALL
+)
 
-add_executable(main main.cpp)
-add_executable(capital_cities capital_cities.cpp)
+add_executable(
+        learn_cpp
+        main.cpp
+)
 
-add_executable(tests tests.cpp)
-target_link_libraries(tests gtest_main)
+include_directories(include)
+add_executable(
+        capital_cities
+        apps/capital_cities/capital_cities.cpp
+        apps/capital_cities/capital_cities_test.cpp)
+target_link_libraries(capital_cities gtest_main)
 
-add_executable(test_setup test_setup.cpp)
-target_link_libraries(test_setup gtest_main)
-
+add_executable(
+        bus_stops_2
+        apps/bus_stops_2/bus_stops.cpp
+        apps/bus_stops_2/bus_stops_test.cpp
+)
+target_link_libraries(bus_stops_2 gtest_main)
 enable_testing()

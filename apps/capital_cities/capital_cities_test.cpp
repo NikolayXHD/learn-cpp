@@ -1,11 +1,19 @@
 #include <vector>
+#include <string>
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
+#include <test_setup.h>
 
-#include "test_setup.cpp"
+#include "capital_cities.cpp"
 
 namespace test {
-  TEST(SUITE, CASE_1) {
+  using namespace std;
+  void test(const string& in, const string& out) {
+    ::capital_cities::App app;
+    ::test_setup::test(app, in, out);
+  }
+
+  TEST(capital_cities, CASE_1) {
     test(
         "6\n"
         "CHANGE_CAPITAL RussianEmpire Petrograd\n"
@@ -24,7 +32,7 @@ namespace test {
     );
   }
 
-  TEST(SUITE, CASE_2) {
+  TEST(capital_cities, CASE_2) {
     test(
         "24\n"
         "RENAME FakeCountry FarFarAway\n"
@@ -79,7 +87,7 @@ namespace test {
     );
   }
 
-  TEST(SUITE, CASE_3) {
+  TEST(capital_cities, CASE_3) {
     test(
       "10\n"
       "CHANGE_CAPITAL RussianEmpire Petrograd\n"

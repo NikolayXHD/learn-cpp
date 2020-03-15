@@ -3,7 +3,7 @@
 #include <iostream>
 #include <map>
 
-namespace app2 {
+namespace capital_cities {
   using namespace std;
 
   class App {
