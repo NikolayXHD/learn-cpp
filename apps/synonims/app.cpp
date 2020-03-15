@@ -1,11 +1,10 @@
-#include <algorithm>
 #include <vector>
 #include <string>
 #include <iostream>
-#include <set>
 #include <map>
+#include <set>
 
-namespace app {
+namespace bus_stops {
 using namespace std;
 
 class App {
@@ -44,10 +43,5 @@ class App {
  private:
   map<string, set<string>> map_;
 };
-}
 
-int main() {
-  app::App app;
-  app.run(std::cin, std::cout);
-  return 0;
 }

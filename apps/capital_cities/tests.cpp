@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include <test_setup.h>
 
-#include "capital_cities.cpp"
+#include "app.cpp"
 
 namespace test {
   using namespace std;

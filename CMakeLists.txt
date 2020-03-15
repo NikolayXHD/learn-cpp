@@ -33,14 +33,21 @@ add_executable(
 include_directories(include)
 add_executable(
         capital_cities
-        apps/capital_cities/capital_cities.cpp
-        apps/capital_cities/capital_cities_test.cpp)
+        apps/capital_cities/app.cpp
+        apps/capital_cities/tests.cpp)
 target_link_libraries(capital_cities gtest_main)
 
 add_executable(
         bus_stops_2
-        apps/bus_stops_2/bus_stops.cpp
-        apps/bus_stops_2/bus_stops_test.cpp
+        apps/bus_stops_2/app.cpp
+        apps/bus_stops_2/tests.cpp
 )
 target_link_libraries(bus_stops_2 gtest_main)
+
+add_executable(
+        synonims
+        apps/synonims/app.cpp
+        apps/synonims/tests.cpp
+)
+target_link_libraries(synonims gtest_main)
 enable_testing()

@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include <test_setup.h>
 
-#include "bus_stops.cpp"
+#include "app.cpp"
 
 namespace test {
   using namespace std;
