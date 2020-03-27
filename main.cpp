@@ -10,39 +10,27 @@ using namespace std;
 
 class App {
  public:
-  App() : map_() {}
+  App() {}
 
   void run(basic_istream<char>& cin, basic_ostream<char>& cout) {
     int count;
     cin >> count;
-
-    for (int i = 0; i < count; i++) {
-      string cmd;
-      cin >> cmd;
-      if (cmd == "ADD") {
-        string w1, w2;
-        cin >> w1 >> w2;
-        map_[w1].insert(w2);
-        map_[w2].insert(w1);
-      } else if (cmd == "COUNT") {
-        string w;
-        cin >> w;
-        cout << map_[w].size() << endl;
-      } else if (cmd == "CHECK") {
-        string w1, w2;
-        cin >> w1 >> w2;
-        if (map_[w1].count(w2) > 0) {
-          cout << "YES";
-        } else {
-          cout << "NO";
-        }
-        cout << endl;
-      }
+    vector<pair<string, string>> values(count);
+    for (auto&[v, v_lower]: values) {
+      cin >> v;
+      v_lower = v;
+      transform(v_lower.begin(), v_lower.end(), v_lower.begin(),
+                [](char c) { return tolower(c); });
     }
+    sort(values.begin(), values.end(),
+         [](const auto& pair1, const auto& pair2) {
+           return pair1.second < pair2.second;
+         });
+    for (const auto& [v, v_lower]: values) {
+      cout << v << ' ';
+    }
+    cout << endl;
   }
-
- private:
-  map<string, set<string>> map_;
 };
 }
 

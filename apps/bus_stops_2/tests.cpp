@@ -15,16 +15,18 @@ namespace test {
 
   TEST(bus_stops_2, CASE_1) {
     test(
-        "4\n"
+        "5\n"
         "2 Marushkino Kokoshkino\n"
         "1 Kokoshkino\n"
         "2 Marushkino Kokoshkino\n"
-        "2 Kokoshkino Marushkino",
+        "2 Kokoshkino Marushkino\n"
+        "2 Kokoshkino Kokoshkino",
 
         "New bus 1\n"
         "New bus 2\n"
         "Already exists for 1\n"
-        "New bus 3"
+        "Already exists for 1\n"
+        "Already exists for 2"
     );
   }
 }

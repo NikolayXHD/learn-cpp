@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <set>
 
 namespace bus_stops {
 using namespace std;
@@ -17,9 +18,11 @@ class App {
     for (int i = 0; i < count; i++) {
       int stops_count;
       in >> stops_count;
-      vector<string> stops(stops_count);
+      set<string> stops;
       for (int j = 0; j < stops_count; j++) {
-        in >> stops[j];
+        string stop;
+        in >> stop;
+        stops.insert(stop);
       }
       auto it = stops_.find(stops);
       if (it == stops_.end()) {
@@ -33,7 +36,7 @@ class App {
   }
 
  private:
-  map<vector<string>, int> stops_;
+  map<set<string>, int> stops_;
 };
 
 }
