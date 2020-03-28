@@ -1,17 +1,18 @@
-#include <vector>
 #include <string>
 #include <iostream>
 #include <map>
 #include <set>
 
-namespace bus_stops {
+#include <test_setup.h>
+
+namespace synonims {
 using namespace std;
 
-class App {
+class App: public ::test_setup::App {
  public:
   App() : map_() {}
 
-  void run(basic_istream<char>& cin, basic_ostream<char>& cout) {
+  void run(basic_istream<char>& cin, basic_ostream<char>& cout) override {
     int count;
     cin >> count;
 

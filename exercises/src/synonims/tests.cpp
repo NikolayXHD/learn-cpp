@@ -1,15 +1,14 @@
 #include <vector>
 #include <string>
 
-#include <gtest/gtest.h>
 #include <test_setup.h>
 
 #include "app.cpp"
 
-namespace test {
+namespace synonims {
   using namespace std;
   void test(const string& in, const string& out) {
-    ::bus_stops::App app;
+    App app;
     ::test_setup::test(app, in, out);
   }
 

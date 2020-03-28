@@ -1,17 +1,18 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <iostream>
 #include <map>
+
+#include <app.h>
 
 namespace bus_stops {
 using namespace std;
 
-class App {
+class App: public ::test_setup::App {
  public:
   App() : stops_(), buses_() {}
 
-  void run(basic_istream<char>& in, basic_ostream<char>& out) {
+  void run(basic_istream<char>& in, basic_ostream<char>& out) override {
     int count;
     in >> count;
 

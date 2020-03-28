@@ -1,16 +1,17 @@
-#include <vector>
 #include <string>
 #include <iostream>
 #include <map>
 
+#include <test_setup.h>
+
 namespace capital_cities {
   using namespace std;
 
-  class App {
+  class App: public ::test_setup::App {
   public:
     App() : m_() {}
 
-    void run(basic_istream<char>& in, basic_ostream<char>& out) {
+    void run(basic_istream<char>& in, basic_ostream<char>& out) override {
       int count;
       in >> count;
 
