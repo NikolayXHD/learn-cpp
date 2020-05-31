@@ -2,40 +2,42 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <set>
-#include <map>
+
+using namespace std;
 
 namespace app {
-using namespace std;
 
 class App {
  public:
-  App() {}
+  App() = default;
 
-  void run(basic_istream<char>& cin, basic_ostream<char>& cout) {
-    int count;
-    cin >> count;
-    vector<pair<string, string>> values(count);
-    for (auto& [v, v_lower]: values) {
-      cin >> v;
-      v_lower = v;
-      transform(v_lower.begin(), v_lower.end(), v_lower.begin(),
-                [](char c) { return tolower(c); });
+  static void run(basic_istream<char>& cin, basic_ostream<char>& cout) {
+    int n;
+    cin >> n;
+    std::vector<int32_t> t(n);
+    int64_t s = 0;
+    for (int i = 0; i < n; i++) {
+      int32_t& ti = t[i];
+      cin >> ti;
+      s += ti;
     }
-    sort(values.begin(), values.end(),
-         [](const auto& pair1, const auto& pair2) {
-           return pair1.second < pair2.second;
-         });
-    for (const auto& [v, v_lower]: values) {
+
+    vector<int> h;
+    for (int i = 0; i < n; i++) {
+      if (static_cast<int64_t>(t[i]) * n > s)
+      h.push_back(i);
+    }
+
+    cout << h.size() << std::endl;
+    for (const auto& v: h) {
       cout << v << ' ';
     }
-    cout << endl;
+    cout << std::endl;
   }
 };
 }
 
 int main() {
-  app::App app;
-  app.run(std::cin, std::cout);
+  app::App::run(std::cin, std::cout);
   return 0;
 }

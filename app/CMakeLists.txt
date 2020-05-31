@@ -8,4 +8,5 @@ add_executable(
         main.cpp
 )
 
-target_compile_options(app PRIVATE -Werror)
+# treat warnings as errors
+target_compile_options(app PRIVATE -Wall -Wextra -pedantic -Werror)
