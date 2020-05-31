@@ -7,3 +7,5 @@ add_executable(
         app
         main.cpp
 )
+
+target_compile_options(app PRIVATE -Werror)

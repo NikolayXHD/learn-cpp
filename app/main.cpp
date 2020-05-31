@@ -16,7 +16,7 @@ class App {
     int count;
     cin >> count;
     vector<pair<string, string>> values(count);
-    for (auto&[v, v_lower]: values) {
+    for (auto& [v, v_lower]: values) {
       cin >> v;
       v_lower = v;
       transform(v_lower.begin(), v_lower.end(), v_lower.begin(),
