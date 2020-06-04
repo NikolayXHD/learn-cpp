@@ -1,124 +1,121 @@
-#include <map>
 #include <iostream>
-#include <limits>
-#include <string>
+#include <map>
 #include <tuple>
-#include <vector>
 
 using namespace std;
 
-enum class Lang {
-  DE, FR, IT
+// Перечислимый тип для статуса задачи
+enum class TaskStatus {
+  NEW,          // новая
+  IN_PROGRESS,  // в разработке
+  TESTING,      // на тестировании
+  DONE          // завершена
 };
 
-struct Region {
-  string std_name;
-  string parent_std_name;
-  map<Lang, string> names;
-  int64_t population;
-};
+// Объявляем тип-синоним для map<TaskStatus, int>,
+// позволяющего хранить количество задач каждого статуса
+using TasksInfo = map<TaskStatus, int>;
 
-static auto get_key(const Region& region) {
-  return tie(region.std_name, region.parent_std_name, region.population);
-}
-
-bool operator<(const Region& r1, const Region& r2) {
-  const auto& key1 = get_key(r1);
-  const auto& key2 = get_key(r2);
-
-  if (key1 != key2) {
-    return key1 < key2;
-  }
-
-  return r1.names < r2.names;
-}
-
-int FindMaxRepetitionCount(const vector<Region> &regions) {
-  if (regions.empty()) {
-    return 0;
-  }
-  map<Region, int> count_by_region;
-  for (auto& r : regions) {
-    count_by_region[r]++;
-  }
-  auto max = numeric_limits<int>::min();
-  for (auto& [r, count]: count_by_region) {
-    if (count > max) {
-      max = count;
+class TeamTasks {
+ public:
+  // Получить статистику по статусам задач конкретного разработчика
+  [[nodiscard]] const TasksInfo &
+  GetPersonTasksInfo(const string &person) const {
+    const auto &it = infos_by_person_.find(person);
+    if (it == infos_by_person_.cend()) {
+      return empty_;
     }
+    return it->second;
   }
-  return max;
-}
 
+  // Добавить новую задачу (в статусе NEW) для конкретного разработчитка
+  void AddNewTask(const string &person) {
+    infos_by_person_[person][TaskStatus::NEW]++;
+  }
+
+  // Обновить статусы по данному количеству задач конкретного разработчика,
+  // подробности см. ниже
+  tuple<TasksInfo, TasksInfo> PerformPersonTasks(
+      const string &person, int task_count) {
+    const auto &it_infos = infos_by_person_.find(person);
+    if (it_infos == infos_by_person_.cend()) {
+      return tie(empty_, empty_);
+    }
+    auto& infos = it_infos->second;
+    if (task_count == 0) {
+      return tie(empty_, infos);
+    }
+
+    const auto infos_copy = infos;
+    TasksInfo updated_infos;
+    TasksInfo intact_infos;
+    for (const auto& it_cp: infos_copy) {
+      auto status = it_cp.first;
+      if (status == TaskStatus::DONE) {
+        break;
+      }
+      int updated = min(task_count, it_cp.second);
+      int intact = it_cp.second - updated;
+      if (updated > 0) {
+        int& new_count = infos.find(status)->second;
+        new_count -= updated;
+        if (new_count == 0) {
+          infos.erase(status);
+        }
+        auto next_status = static_cast<TaskStatus>((static_cast<int>(status) + 1));
+        infos[next_status] += updated;
+        updated_infos[next_status] = updated;
+      }
+
+      if (intact > 0) {
+        intact_infos[status] = updated;
+      }
+    }
+
+    return tie(updated_infos, intact_infos);
+  }
+
+ private:
+  map<string, TasksInfo> infos_by_person_{};
+  const TasksInfo empty_{};
+};
+
+// Принимаем словарь по значению, чтобы иметь возможность
+// обращаться к отсутствующим ключам с помощью [] и получать 0,
+// не меняя при этом исходный словарь
+void PrintTasksInfo(TasksInfo tasks_info) {
+  cout << tasks_info[TaskStatus::NEW] << " new tasks" <<
+       ", " << tasks_info[TaskStatus::IN_PROGRESS] << " tasks in progress" <<
+       ", " << tasks_info[TaskStatus::TESTING] << " tasks are being tested" <<
+       ", " << tasks_info[TaskStatus::DONE] << " tasks are done" << endl;
+}
 
 int main() {
-  cout << FindMaxRepetitionCount(
-      {
-          {
-              "Moscow",
-              "Russia",
-              {{Lang::DE, "Moskau"},   {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
-              89
-          },
-          {
-              "Russia",
-              "Eurasia",
-              {{Lang::DE, "Russland"}, {Lang::FR, "Russie"}, {Lang::IT, "Russia"}},
-              89
-          },
-          {
-              "Moscow",
-              "Russia",
-              {{Lang::DE, "Moskau"},   {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
-              89
-          },
-          {
-              "Moscow",
-              "Russia",
-              {{Lang::DE, "Moskau"},   {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
-              89
-          },
-          {
-              "Russia",
-              "Eurasia",
-              {{Lang::DE, "Russland"}, {Lang::FR, "Russie"}, {Lang::IT, "Russia"}},
-              89
-          },
-      }) << endl;
+  TeamTasks tasks;
+  tasks.AddNewTask("Ilia");
+  for (int i = 0; i < 3; ++i) {
+    tasks.AddNewTask("Ivan");
+  }
+  cout << "Ilia's tasks: ";
+  PrintTasksInfo(tasks.GetPersonTasksInfo("Ilia"));
+  cout << "Ivan's tasks: ";
+  PrintTasksInfo(tasks.GetPersonTasksInfo("Ivan"));
 
-  cout << FindMaxRepetitionCount(
-      {
-          {
-              "Moscow",
-              "Russia",
-              {{Lang::DE, "Moskau"},   {Lang::FR, "Moscou"},      {Lang::IT, "Mosca"}},
-              89
-          },
-          {
-              "Russia",
-              "Eurasia",
-              {{Lang::DE, "Russland"}, {Lang::FR, "Russie"},      {Lang::IT, "Russia"}},
-              89
-          },
-          {
-              "Moscow",
-              "Russia",
-              {{Lang::DE, "Moskau"},   {Lang::FR, "Moscou deux"}, {Lang::IT, "Mosca"}},
-              89
-          },
-          {
-              "Moscow",
-              "Toulouse",
-              {{Lang::DE, "Moskau"},   {Lang::FR, "Moscou"},      {Lang::IT, "Mosca"}},
-              89
-          },
-          {
-              "Moscow",
-              "Russia",
-              {{Lang::DE, "Moskau"},   {Lang::FR, "Moscou"},      {Lang::IT, "Mosca"}},
-              31
-          },
-      }) << endl;
+  TasksInfo updated_tasks, untouched_tasks;
+
+  tie(updated_tasks, untouched_tasks) =
+      tasks.PerformPersonTasks("Ivan", 2);
+  cout << "Updated Ivan's tasks: ";
+  PrintTasksInfo(updated_tasks);
+  cout << "Untouched Ivan's tasks: ";
+  PrintTasksInfo(untouched_tasks);
+
+  tie(updated_tasks, untouched_tasks) =
+      tasks.PerformPersonTasks("Ivan", 2);
+  cout << "Updated Ivan's tasks: ";
+  PrintTasksInfo(updated_tasks);
+  cout << "Untouched Ivan's tasks: ";
+  PrintTasksInfo(untouched_tasks);
 
   return 0;
 }
