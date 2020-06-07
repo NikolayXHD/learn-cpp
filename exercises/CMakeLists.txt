@@ -9,6 +9,7 @@ add_executable(exercises)
 target_include_directories(exercises PRIVATE src/_test_setup)
 target_sources(exercises PRIVATE
     src/_test_setup/test_setup.cpp
+    src/bus_stops/app.h
     src/bus_stops/app.cpp
     src/bus_stops/tests.cpp
 #    src/bus_stops_2/app.cpp

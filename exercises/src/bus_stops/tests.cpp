@@ -3,7 +3,7 @@
 
 #include <test_setup.h>
 
-#include "app.cpp"
+#include "app.h"
 
 namespace bus_stops {
   using namespace std;
